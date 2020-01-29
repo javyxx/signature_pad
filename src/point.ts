@@ -3,13 +3,18 @@ export interface IBasicPoint {
   x: number;
   y: number;
   time: number;
+  presure: number;
 }
 
 export class Point implements IBasicPoint {
   public time: number;
+  public presure: number;
 
-  constructor(public x: number, public y: number, time?: number) {
+  constructor(public x: number, public y: number, time?: number, presure?: number) {
     this.time = time || Date.now();
+    if(this.presure){
+      this.presure =  presure as number;
+    }
   }
 
   public distanceTo(start: IBasicPoint): number {

@@ -29,8 +29,8 @@ export interface IOptions {
   penColor?: string;
   throttle?: number;
   velocityFilterWeight?: number;
-  onBegin?: (event: MouseEvent | Touch) => void;
-  onEnd?: (event: MouseEvent | Touch) => void;
+  onBegin?: (event: MouseEvent | Touch | PointerEvent ) => void;
+  onEnd?: (event: MouseEvent | Touch | PointerEvent) => void;
 }
 
 export interface IPointGroup {
@@ -48,8 +48,8 @@ export default class SignaturePad {
   public penColor: string;
   public throttle: number;
   public velocityFilterWeight: number;
-  public onBegin?: (event: MouseEvent | Touch) => void;
-  public onEnd?: (event: MouseEvent | Touch) => void;
+  public onBegin?: (event: MouseEvent | Touch | PointerEvent) => void;
+  public onEnd?: (event: MouseEvent | Touch | PointerEvent) => void;
 
   // Private stuff
   /* tslint:disable: variable-name */
@@ -173,9 +173,9 @@ export default class SignaturePad {
     this.canvas.style.touchAction = 'auto';
     this.canvas.style.msTouchAction = 'auto';
 
-    this.canvas.removeEventListener('pointerdown', this._handleMouseDown);
-    this.canvas.removeEventListener('pointermove', this._handleMouseMove);
-    document.removeEventListener('pointerup', this._handleMouseUp);
+    this.canvas.removeEventListener('pointerdown', this._handlePointerDown);
+    this.canvas.removeEventListener('pointermove', this._handlePointerMove);
+    document.removeEventListener('pointerup', this._handlePointerUp);
 
     this.canvas.removeEventListener('mousedown', this._handleMouseDown);
     this.canvas.removeEventListener('mousemove', this._handleMouseMove);
@@ -227,6 +227,26 @@ export default class SignaturePad {
     }
   };
 
+  private _handlePointerDown = (event: PointerEvent): void => {
+    if (event.which === 1) {
+      this._mouseButtonDown = true;
+      this._strokeBegin(event);
+    }
+  };
+
+  private _handlePointerMove = (event: PointerEvent): void => {
+    if (this._mouseButtonDown) {
+      this._strokeMoveUpdate(event);
+    }
+  };
+
+  private _handlePointerUp = (event: PointerEvent): void => {
+    if (event.which === 1 && this._mouseButtonDown) {
+      this._mouseButtonDown = false;
+      this._strokeEnd(event);
+    }
+  };
+
   private _handleTouchStart = (event: TouchEvent): void => {
     // Prevent scrolling.
     event.preventDefault();
@@ -256,7 +276,7 @@ export default class SignaturePad {
   };
 
   // Private methods
-  private _strokeBegin(event: MouseEvent | Touch): void {
+  private _strokeBegin(event: MouseEvent | Touch | PointerEvent): void {
     const newPointGroup = {
       color: this.penColor,
       points: [],
@@ -295,15 +315,27 @@ export default class SignaturePad {
         this._drawCurve({ color, curve });
       }
 
+      let presure = 1;
+      if(event instanceof Touch){
+        var touchEvent = event as Touch;
+        presure = touchEvent.force;
+      }
+
+      if(event instanceof PointerEvent){
+        var pointEvent = event as PointerEvent;
+        presure = pointEvent.pressure;
+      }
+
       lastPoints.push({
         time: point.time,
         x: point.x,
         y: point.y,
+        presure: presure
       });
     }
   }
 
-  private _strokeEnd(event: MouseEvent | Touch): void {
+  private _strokeEnd(event: MouseEvent | Touch | PointerEvent): void {
     this._strokeUpdate(event);
 
     if (typeof this.onEnd === 'function') {
@@ -314,9 +346,9 @@ export default class SignaturePad {
   private _handlePointerEvents(): void {
     this._mouseButtonDown = false;
 
-    this.canvas.addEventListener('pointerdown', this._handleMouseDown);
-    this.canvas.addEventListener('pointermove', this._handleMouseMove);
-    document.addEventListener('pointerup', this._handleMouseUp);
+    this.canvas.addEventListener('pointerdown', this._handlePointerDown);
+    this.canvas.addEventListener('pointermove', this._handlePointerMove);
+    document.addEventListener('pointerup', this._handlePointerUp);
   }
 
   private _handleMouseEvents(): void {
