@@ -28,4 +28,9 @@ jobs:
         # Artifact name
         name: signature_pad
         # Directory containing files to upload
-        path: dist
+        path: .
+    - name: Action Release
+      uses: yakuhzi/action-release@v1.2.0
+      with:
+        # File to upload to the release
+        file: signature_pad.zip
