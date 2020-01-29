@@ -1,5 +1,5 @@
 {
-  "name": "signature_pad",
+  "name": "@javyxx/signature_pad",
   "description": "Library for drawing smooth signatures.",
   "version": "3.0.0-beta.3",
   "homepage": "https://github.com/szimek/signature_pad",
