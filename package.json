@@ -2,11 +2,11 @@
   "name": "@javyxx/signature_pad",
   "description": "Library for drawing smooth signatures.",
   "version": "3.0.0-beta.3",
-  "homepage": "https://github.com/szimek/signature_pad",
+  "homepage": "https://github.com/javyxx/signature_pad",
   "author": {
-    "name": "Szymon Nowak",
-    "email": "szimek@gmail.com",
-    "url": "https://github.com/szimek"
+    "name": "Javier Ledo",
+    "email": "javyxx@gmail.com",
+    "url": "https://github.com/javyxx"
   },
   "license": "MIT",
   "source": "src/signature_pad.ts",
