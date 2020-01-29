@@ -1,6 +1,6 @@
 /*!
  * Signature Pad v3.0.0-beta.3 | https://github.com/szimek/signature_pad
- * (c) 2018 Szymon Nowak | Released under the MIT license
+ * (c) 2020 Szymon Nowak | Released under the MIT license
  */
 
 (function (global, factory) {
@@ -10,10 +10,13 @@
 }(this, (function () { 'use strict';
 
   var Point = (function () {
-      function Point(x, y, time) {
+      function Point(x, y, time, presure) {
           this.x = x;
           this.y = y;
           this.time = time || Date.now();
+          if (this.presure) {
+              this.presure = presure;
+          }
       }
       Point.prototype.distanceTo = function (start) {
           return Math.sqrt(Math.pow(this.x - start.x, 2) + Math.pow(this.y - start.y, 2));
@@ -60,7 +63,7 @@
           var ty = s2.y - cm.y;
           return {
               c1: new Point(m1.x + tx, m1.y + ty),
-              c2: new Point(m2.x + tx, m2.y + ty)
+              c2: new Point(m2.x + tx, m2.y + ty),
           };
       };
       Bezier.prototype.length = function () {
@@ -137,8 +140,8 @@
 
   var SignaturePad = (function () {
       function SignaturePad(canvas, options) {
-          if (options === void 0) { options = {}; }
           var _this = this;
+          if (options === void 0) { options = {}; }
           this.canvas = canvas;
           this.options = options;
           this._handleMouseDown = function (event) {
@@ -153,6 +156,23 @@
               }
           };
           this._handleMouseUp = function (event) {
+              if (event.which === 1 && _this._mouseButtonDown) {
+                  _this._mouseButtonDown = false;
+                  _this._strokeEnd(event);
+              }
+          };
+          this._handlePointerDown = function (event) {
+              if (event.which === 1) {
+                  _this._mouseButtonDown = true;
+                  _this._strokeBegin(event);
+              }
+          };
+          this._handlePointerMove = function (event) {
+              if (_this._mouseButtonDown) {
+                  _this._strokeMoveUpdate(event);
+              }
+          };
+          this._handlePointerUp = function (event) {
               if (event.which === 1 && _this._mouseButtonDown) {
                   _this._mouseButtonDown = false;
                   _this._strokeEnd(event);
@@ -261,9 +281,9 @@
       SignaturePad.prototype.off = function () {
           this.canvas.style.touchAction = 'auto';
           this.canvas.style.msTouchAction = 'auto';
-          this.canvas.removeEventListener('pointerdown', this._handleMouseDown);
-          this.canvas.removeEventListener('pointermove', this._handleMouseMove);
-          document.removeEventListener('pointerup', this._handleMouseUp);
+          this.canvas.removeEventListener('pointerdown', this._handlePointerDown);
+          this.canvas.removeEventListener('pointermove', this._handlePointerMove);
+          document.removeEventListener('pointerup', this._handlePointerUp);
           this.canvas.removeEventListener('mousedown', this._handleMouseDown);
           this.canvas.removeEventListener('mousemove', this._handleMouseMove);
           document.removeEventListener('mouseup', this._handleMouseUp);
@@ -292,7 +312,7 @@
       SignaturePad.prototype._strokeBegin = function (event) {
           var newPointGroup = {
               color: this.penColor,
-              points: []
+              points: [],
           };
           if (typeof this.onBegin === 'function') {
               this.onBegin(event);
@@ -320,10 +340,20 @@
               else if (curve) {
                   this._drawCurve({ color: color, curve: curve });
               }
+              var pointPresure = void 0;
+              if (event instanceof Touch) {
+                  var touchEvent = event;
+                  pointPresure = touchEvent.force;
+              }
+              if (event instanceof PointerEvent) {
+                  var pointEvent = event;
+                  pointPresure = pointEvent.pressure;
+              }
               lastPoints.push({
+                  presure: pointPresure,
                   time: point.time,
                   x: point.x,
-                  y: point.y
+                  y: point.y,
               });
           }
       };
@@ -335,9 +365,9 @@
       };
       SignaturePad.prototype._handlePointerEvents = function () {
           this._mouseButtonDown = false;
-          this.canvas.addEventListener('pointerdown', this._handleMouseDown);
-          this.canvas.addEventListener('pointermove', this._handleMouseMove);
-          document.addEventListener('pointerup', this._handleMouseUp);
+          this.canvas.addEventListener('pointerdown', this._handlePointerDown);
+          this.canvas.addEventListener('pointermove', this._handlePointerMove);
+          document.addEventListener('pointerup', this._handlePointerUp);
       };
       SignaturePad.prototype._handleMouseEvents = function () {
           this._mouseButtonDown = false;
@@ -380,7 +410,7 @@
           var newWidth = this._strokeWidth(velocity);
           var widths = {
               end: newWidth,
-              start: this._lastWidth
+              start: this._lastWidth,
           };
           this._lastVelocity = velocity;
           this._lastWidth = newWidth;
@@ -417,7 +447,7 @@
               y += 3 * uu * t * curve.control1.y;
               y += 3 * u * tt * curve.control2.y;
               y += ttt * curve.endPoint.y;
-              var width = curve.startWidth + ttt * widthDelta;
+              var width = Math.min(curve.startWidth + ttt * widthDelta, this.maxWidth);
               this._drawCurveSegment(x, y, width);
           }
           ctx.closePath();
@@ -455,7 +485,7 @@
                   this._reset();
                   drawDot({
                       color: color,
-                      point: points[0]
+                      point: points[0],
                   });
               }
           }

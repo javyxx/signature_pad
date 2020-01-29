@@ -118,7 +118,7 @@ export default class SignaturePad {
   public fromDataURL(
     dataUrl: string,
     options: { ratio?: number; width?: number; height?: number } = {},
-    callback?: (error?: ErrorEvent) => void,
+    callback?: (error?: Event | string) => void,
   ): void {
     const image = new Image();
     const ratio = options.ratio || window.devicePixelRatio || 1;
