@@ -4,9 +4,9 @@
   "version": "3.0.0-beta.3",
   "homepage": "https://github.com/javyxx/signature_pad",
   "author": {
-    "name": "Javier Ledo",
-    "email": "javyxx@gmail.com",
-    "url": "https://github.com/javyxx"
+    "name": "Szymon Nowak",
+    "email": "szimek@gmail.com",
+    "url": "https://github.com/szimek"
   },
   "license": "MIT",
   "source": "src/signature_pad.ts",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/szimek/signature_pad.git"
+    "url": "https://github.com/javyxx/signature_pad.git"
   },
   "files": [
     "src",
