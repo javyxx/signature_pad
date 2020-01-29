@@ -315,22 +315,22 @@ export default class SignaturePad {
         this._drawCurve({ color, curve });
       }
 
-      let presure = 1;
+      let pointPresure;
       if(event instanceof Touch){
-        var touchEvent = event as Touch;
-        presure = touchEvent.force;
+        const touchEvent = event as Touch;
+        pointPresure = touchEvent.force;
       }
 
       if(event instanceof PointerEvent){
-        var pointEvent = event as PointerEvent;
-        presure = pointEvent.pressure;
+        const pointEvent = event as PointerEvent;
+        pointPresure = pointEvent.pressure;
       }
 
       lastPoints.push({
+        presure: pointPresure,
         time: point.time,
         x: point.x,
         y: point.y,
-        presure: presure
       });
     }
   }

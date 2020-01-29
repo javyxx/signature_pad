@@ -3,7 +3,7 @@ export interface IBasicPoint {
   x: number;
   y: number;
   time: number;
-  presure: number;
+  presure?: number;
 }
 
 export class Point implements IBasicPoint {
