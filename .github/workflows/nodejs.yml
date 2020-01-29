@@ -31,7 +31,7 @@ jobs:
         path: dist
     - uses: actions/setup-node@v1
       with:
-        registry-url: 'https://npm.pkg.github.com'
+        registry-url: 'https://npm.pkg.github.com/javyxx'
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
