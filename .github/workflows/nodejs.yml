@@ -28,9 +28,16 @@ jobs:
         # Artifact name
         name: signature_pad
         # Directory containing files to upload
-        path: .
-    - name: Action Release
-      uses: yakuhzi/action-release@v1.2.0
-      with:
-        # File to upload to the release
-        file: signature_pad.zip
+        path: dist
+  publish-gpr:
+    name: Publish GitHub Packages
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
