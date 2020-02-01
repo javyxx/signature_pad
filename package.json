@@ -1,5 +1,5 @@
 {
-  "name": "@javyxx/signature_pad",
+  "name": "xestando_signature_pad",
   "description": "Library for drawing smooth signatures.",
   "version": "3.0.0-beta.3",
   "homepage": "https://github.com/javyxx/signature_pad",
@@ -83,8 +83,5 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
