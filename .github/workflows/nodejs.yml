@@ -31,9 +31,3 @@ jobs:
         name: signature_pad
         # Directory containing files to upload
         path: dist
-    - uses: actions/setup-node@v1
-      with:
-        registry-url: 'https://npm.pkg.github.com/'
-    - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
