@@ -291,7 +291,7 @@ export default class SignaturePad {
     this._strokeUpdate(event);
   }
 
-  private _strokeUpdate(event: MouseEvent | Touch): void {
+  private _strokeUpdate(event: MouseEvent | Touch | PointerEvent): void {
     const x = event.clientX;
     const y = event.clientY;
 
@@ -323,7 +323,9 @@ export default class SignaturePad {
 
       if(event instanceof PointerEvent){
         const pointEvent = event as PointerEvent;
-        pointPresure = pointEvent.pressure;
+        if(pointEvent.pointerType !== 'mouse'){
+           pointPresure = pointEvent.pressure;
+        }
       }
 
       lastPoints.push({
