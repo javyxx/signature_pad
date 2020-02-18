@@ -8,7 +8,7 @@ export interface IBasicPoint {
 
 export class Point implements IBasicPoint {
   public time: number;
-  public presure: number;
+  public presure: number | undefined;
 
   constructor(public x: number, public y: number, time?: number, presure?: number) {
     this.time = time || Date.now();

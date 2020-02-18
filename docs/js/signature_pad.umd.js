@@ -1,12 +1,12 @@
 /*!
- * Signature Pad v3.0.0-beta.3 | https://github.com/szimek/signature_pad
+ * Signature Pad v3.0.0-beta.4 | https://github.com/szimek/signature_pad
  * (c) 2020 Szymon Nowak | Released under the MIT license
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.SignaturePad = factory());
+  (global = global || self, global.SignaturePad = factory());
 }(this, (function () { 'use strict';
 
   var Point = (function () {
@@ -347,7 +347,9 @@
               }
               if (event instanceof PointerEvent) {
                   var pointEvent = event;
-                  pointPresure = pointEvent.pressure;
+                  if (pointEvent.pointerType !== 'mouse') {
+                      pointPresure = pointEvent.pressure;
+                  }
               }
               lastPoints.push({
                   presure: pointPresure,
