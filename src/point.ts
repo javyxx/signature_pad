@@ -4,16 +4,26 @@ export interface IBasicPoint {
   y: number;
   time: number;
   presure?: number;
+  tiltX?: number;
+  tiltY?: number;
 }
 
 export class Point implements IBasicPoint {
   public time: number;
   public presure: number | undefined;
+  public tiltX: number | undefined;
+  public tiltY: number | undefined;
 
-  constructor(public x: number, public y: number, time?: number, presure?: number) {
+  constructor(public x: number, public y: number, time?: number, presure?: number, tiltX?: number, tiltY?: number) {
     this.time = time || Date.now();
-    if(this.presure){
+    if(presure){
       this.presure =  presure as number;
+    }
+    if(tiltX){
+      this.tiltX =  tiltX as number;
+    }
+    if(tiltY){
+      this.tiltY =  tiltY as number;
     }
   }
 

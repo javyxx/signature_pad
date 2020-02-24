@@ -316,6 +316,8 @@ export default class SignaturePad {
       }
 
       let pointPresure;
+      let pointTiltX;
+      let pointTiltY;
       if(event instanceof Touch){
         const touchEvent = event as Touch;
         pointPresure = touchEvent.force;
@@ -325,11 +327,15 @@ export default class SignaturePad {
         const pointEvent = event as PointerEvent;
         if(pointEvent.pointerType !== 'mouse'){
            pointPresure = pointEvent.pressure;
+           pointTiltX = pointEvent.tiltX;
+           pointTiltY = pointEvent.tiltY;
         }
       }
 
       lastPoints.push({
         presure: pointPresure,
+        tiltX: pointTiltX,
+        tiltY: pointTiltY,
         time: point.time,
         x: point.x,
         y: point.y,
