@@ -1,12 +1,7 @@
-/*!
- * Signature Pad v3.0.0-beta.6 | https://github.com/szimek/signature_pad
- * (c) 2020 Szymon Nowak | Released under the MIT license
- */
-
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.SignaturePad = factory());
+  (global = global || self, global.SignaturePad = factory());
 }(this, (function () { 'use strict';
 
   var Point = (function () {
