@@ -1,21 +1,27 @@
 /*!
- * Signature Pad v3.0.0-beta.4 | https://github.com/szimek/signature_pad
+ * Signature Pad v3.0.0-beta.6 | https://github.com/szimek/signature_pad
  * (c) 2020 Szymon Nowak | Released under the MIT license
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.SignaturePad = factory());
+  (global.SignaturePad = factory());
 }(this, (function () { 'use strict';
 
   var Point = (function () {
-      function Point(x, y, time, presure) {
+      function Point(x, y, time, presure, tiltX, tiltY) {
           this.x = x;
           this.y = y;
           this.time = time || Date.now();
-          if (this.presure) {
+          if (presure) {
               this.presure = presure;
+          }
+          if (tiltX) {
+              this.tiltX = tiltX;
+          }
+          if (tiltY) {
+              this.tiltY = tiltY;
           }
       }
       Point.prototype.distanceTo = function (start) {
@@ -341,6 +347,8 @@
                   this._drawCurve({ color: color, curve: curve });
               }
               var pointPresure = void 0;
+              var pointTiltX = void 0;
+              var pointTiltY = void 0;
               if (event instanceof Touch) {
                   var touchEvent = event;
                   pointPresure = touchEvent.force;
@@ -349,10 +357,14 @@
                   var pointEvent = event;
                   if (pointEvent.pointerType !== 'mouse') {
                       pointPresure = pointEvent.pressure;
+                      pointTiltX = pointEvent.tiltX;
+                      pointTiltY = pointEvent.tiltY;
                   }
               }
               lastPoints.push({
                   presure: pointPresure,
+                  tiltX: pointTiltX,
+                  tiltY: pointTiltY,
                   time: point.time,
                   x: point.x,
                   y: point.y,

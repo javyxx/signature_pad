@@ -33,8 +33,7 @@ export default [
     ],
     output: {
       file: 'dist/signature_pad.js',
-      format: 'cjs',
-      banner,
+      format: 'cjs'
     },
   },
 
@@ -51,8 +50,7 @@ export default [
     ],
     output: {
       file: 'dist/signature_pad.min.js',
-      format: 'cjs',
-      banner,
+      format: 'cjs'
     },
   },
 
@@ -69,8 +67,7 @@ export default [
     output: {
       file: 'dist/signature_pad.umd.js',
       format: 'umd',
-      name: 'SignaturePad',
-      banner,
+      name: 'SignaturePad'
     },
   },
 
@@ -88,8 +85,7 @@ export default [
     output: {
       file: 'dist/signature_pad.umd.min.js',
       format: 'umd',
-      name: 'SignaturePad',
-      banner,
+      name: 'SignaturePad'
     },
   },
 
@@ -124,8 +120,7 @@ export default [
     ],
     output: {
       file: 'dist/signature_pad.m.min.js',
-      format: 'es',
-      banner,
+      format: 'es'
     },
   },
 ];
